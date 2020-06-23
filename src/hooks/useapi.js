@@ -3,6 +3,14 @@ import { useState, useEffect } from 'react';
 import { ax } from './useAxiosLoader';
 import { useErrorStatus } from '../views/ErrorHandler';
 
+/**
+ * Usage: const [result, listLoading, listLoaded, error, refresh, setResult] = useApi('get', 'http://example.com/users', {}, false);
+ * Note: refresh() is used to invoke the API on demand (using refreshIndex as the key for detecting change)
+ * @param {*} method 
+ * @param {*} url 
+ * @param {*} data 
+ * @param {*} skip 
+ */
 export function useApi(method, url, data, skip) {
   const [result, setResult] = useState();
   const [loading, setLoading] = useState(false);
