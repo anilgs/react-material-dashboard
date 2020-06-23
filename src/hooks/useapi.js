@@ -4,7 +4,7 @@ import { ax } from './useAxiosLoader';
 import { useErrorStatus } from '../views/ErrorHandler';
 
 /**
- * Usage: const [result, listLoading, listLoaded, error, refresh, setResult] = useApi('get', 'http://example.com/users', {}, false);
+ * Usage: const [result, loading, loaded, error, refresh, setResult] = useApi('get', 'http://example.com/users', {}, false);
  * Note: refresh() is used to invoke the API on demand (using refreshIndex as the key for detecting change)
  * @param {*} method 
  * @param {*} url 
