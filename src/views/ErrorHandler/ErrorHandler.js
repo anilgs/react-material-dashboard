@@ -15,11 +15,7 @@ export const ErrorHandler = ({ children }) => {
   let  displayErr = { status: false, code: 0, message: '', initial: true}
   const [err, setErrorStatus, initial, setInitial] = useError(displayErr);
 
-  if(initial && err && err.message && !err.status) {
-    displayErr.status = true;
-    setErrorStatus(displayErr);
-    setInitial(false);
-  }
+
 
   
   const handleSnackbarClose =  () => {
