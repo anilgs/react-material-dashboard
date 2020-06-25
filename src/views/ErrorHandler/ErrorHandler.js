@@ -1,9 +1,16 @@
+/* eslint-disable react/no-multi-comp */
 /* eslint-disable linebreak-style */
 import React from 'react';
 import { NotFound } from '../';
 import { useError } from '../../hooks/useError';
 import { Snackbar } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import MuiAlert from '@material-ui/lab/Alert';
+
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 // A context will be the way that we allow components lower down 
 // the tree to trigger the display of an error page
@@ -57,12 +64,19 @@ export const ErrorHandler = ({ children }) => {
     <ErrorStatusContext.Provider value={contextPayload}>
       {renderContent()}
       <Snackbar
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom'}}
+        anchorOrigin={err && err.status ? { horizontal: 'left', vertical: 'bottom'} : { horizontal: 'right', vertical: 'top'}}
         autoHideDuration={5000}
         message = {err ? err.message : ''}
         onClose={handleSnackbarClose}
-        open={err ? err.status : false}
-      />
+        open={err ? (err.status ||  err.message.length > 0) : false}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity= {err && err.status ? "error" : "success"}
+        >
+          { err ? err.message : '' }
+        </Alert>
+      </Snackbar>
     </ErrorStatusContext.Provider>
   )
 }

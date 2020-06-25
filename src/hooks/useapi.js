@@ -34,24 +34,27 @@ export function useApi(method, url, data, skip) {
 
   useEffect(() => {
     let cancelled = false;
-    if (skipState) {
-      setResult(null);
-      setLoading(false);
-      setLoaded(false);
-    } else {
-      setLoading(true);
-      ax({
-        method: method,
-        url: urlState,
-        data: dataState
-      }).then(r => {
-        if (!cancelled) {
-          setResult(r.data);
-          setLoading(false);
-          setLoaded(true);
+    const fetchData = async () => {
+      
+      if (skipState) {
+        setResult(null);
+        setLoading(false);
+        setLoaded(false);
+      } else {
+        setLoading(true);
+        try{
+          const r = await ax({
+            method: method,
+            url: urlState,
+            data: dataState
+          })
+          if (!cancelled) {
+            setResult(r.data);
+            setLoaded(true);
+            setLoading(false);
+          }
         }
-      })
-        .catch(error => {
+        catch(error) {
           setLoading(false);
           if (error.response) {
             setError(error.response.data);
@@ -61,12 +64,14 @@ export function useApi(method, url, data, skip) {
             setError(error.message);
             setErrorStatus({status: true, message:error.message, code:0, initial: false});
           }
-        });
+        }
+      }
     }
+    fetchData();
     return () => {
       cancelled = true;
     };
   }, [url, refreshIndex]);
 
-  return [result, loading, loaded, error, refresh, setResult];
+  return [result, loading, loaded, error, refresh];
 }
