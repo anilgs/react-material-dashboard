@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button, colors, MenuItem } from '@material-ui/core';
 import {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -41,6 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
 const CustomRouterLink = forwardRef((props, ref) => (
   <div
     ref={ref}
@@ -54,9 +56,12 @@ const SidebarNav = props => {
   const { pages, className, ...rest } = props;
 
   const classes = useStyles();
-  const [selected, setSelected] = useState(0);
+  const [selected, setSidebarSelected] = useState(0);
+  const history = useHistory();
+
 
   return (
+
     <List
       {...rest}
       className={clsx(classes.root, className)}
@@ -68,13 +73,13 @@ const SidebarNav = props => {
           className={classes.item}
           disableGutters
           key={page.title}
-          selected={selected == index}
+          selected={page.href == history.location.pathname}
         >
           <Button
             activeClassName={classes.active}
             className={classes.button}
             component={CustomRouterLink}
-            onClick={()=>setSelected(index)}
+            onClick={()=>setSidebarSelected(index)}
             to={page.href}
           >
             <div className={classes.icon}>{page.icon}</div>
@@ -84,6 +89,7 @@ const SidebarNav = props => {
   
       ))}
     </List>
+
   );
 };
 
@@ -93,3 +99,4 @@ SidebarNav.propTypes = {
 };
 
 export default SidebarNav;
+
