@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ax } from './useAxiosLoader';
 import { useErrorStatus } from '../views/ErrorHandler';
 
@@ -21,6 +21,10 @@ export function useApi(method, url, data, skip) {
   const [urlState, setURLState] = useState(url);
   const [dataState, setDataState] = useState(data);
   const { setErrorStatus } = useErrorStatus();
+  const urlRef = useRef();
+  urlRef.current = urlState;
+  const dataRef = useRef();
+  dataRef.current = dataState;
 
   const refresh = (modurl=undefined, moddata=undefined, modskip=false) => {
     if(modurl !== undefined)
@@ -45,8 +49,8 @@ export function useApi(method, url, data, skip) {
         try{
           const r = await ax({
             method: method,
-            url: urlState,
-            data: dataState
+            url: urlRef.current,
+            data: dataRef.current
           })
           if (!cancelled) {
             setResult(r.data);
